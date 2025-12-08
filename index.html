@@ -8,43 +8,50 @@
 </head>
 <body>
     <div id="app-container">
-        <!-- Start Screen -->
-        <div id="start-screen" class="screen">
-            <h1>CPT Test for ADD</h1>
-            <div class="instructions">
-                <p>Press <strong>SPACEBAR</strong> for every letter except the <strong>X</strong>.</p>
-                <p>Do <strong>NOT</strong> press anything when the <strong>X</strong> appears.</p>
+        <div class="focus-box">
+            <!-- Start Screen -->
+            <div id="start-screen" class="screen">
+                <h1>CPT Test for ADD</h1>
+                <div class="instructions">
+                    <p>Press <strong>SPACEBAR</strong> for every letter except the <strong>X</strong>.</p>
+                    <p>Do <strong>NOT</strong> press anything when the <strong>X</strong> appears.</p>
+                </div>
+                <button id="btn-start-initial">Start</button>
+                <button id="btn-settings" style="background-color: #7f8c8d; font-size: 0.9rem;">Settings</button>
+                <button id="btn-history" style="background-color: #3498db; font-size: 0.9rem; display:none;">History</button>
             </div>
-            <button id="btn-start-initial">Start</button>
-            <button id="btn-settings" style="background-color: #555; font-size: 0.9rem;">Settings</button>
-        </div>
 
-        <!-- Name Input Screen -->
-        <div id="name-screen" class="screen hidden">
-            <h1>Enter Participant Details</h1>
-            <input type="text" id="participant-name" placeholder="Enter Name or ID" autocomplete="off">
-            <button id="btn-start-test">Start Test</button>
-        </div>
-
-        <!-- Countdown Screen -->
-        <div id="countdown-screen" class="screen hidden">
-            <div id="countdown">3</div>
-        </div>
-
-        <!-- Test Screen -->
-        <div id="test-screen" class="screen hidden">
-            <div id="stimulus-display"></div>
-        </div>
-
-        <!-- Results Screen -->
-        <div id="results-screen" class="screen hidden">
-            <h2>Test Results</h2>
-            <div id="results-summary">
-                <table id="results-table">
-                    <!-- Populated by JS -->
-                </table>
+            <!-- Name Input Screen -->
+            <div id="name-screen" class="screen hidden">
+                <h1>Enter Participant Details</h1>
+                <input type="text" id="participant-name" placeholder="Enter Name or ID" autocomplete="off">
+                <button id="btn-start-test">Begin Test</button>
             </div>
-            <button id="btn-restart">Restart</button>
+
+            <!-- Countdown Screen -->
+            <div id="countdown-screen" class="screen hidden">
+                <div id="countdown">3</div>
+            </div>
+
+            <!-- Test Screen -->
+            <div id="test-screen" class="screen hidden">
+                <div id="stimulus-display"></div>
+                <!-- Keystroke Indicator -->
+                <div id="keystroke-indicator">
+                    <span class="key-icon">Space</span> Pressed
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div id="results-screen" class="screen hidden">
+                <h2>Test Results</h2>
+                <div id="results-summary">
+                    <table id="results-table">
+                        <!-- Populated by JS -->
+                    </table>
+                </div>
+                <button id="btn-restart">Restart</button>
+            </div>
         </div>
     </div>
 

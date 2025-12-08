@@ -36,7 +36,8 @@ const els = {
     countdown: document.getElementById('countdown'),
     nameInput: document.getElementById('participant-name'),
     settingsModal: document.getElementById('settings-modal'),
-    resultsTable: document.getElementById('results-table')
+    resultsTable: document.getElementById('results-table'),
+    keystrokeIndicator: document.getElementById('keystroke-indicator')
 };
 
 // Initialization
@@ -49,26 +50,45 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Keyboard listener
     document.addEventListener('keydown', handleInput);
+    document.addEventListener('keyup', handleKeyUp);
 });
 
-function saveSettings() {
-    CONFIG.totalTrials = parseInt(document.getElementById('setting-trials').value) || 300;
-    CONFIG.targetPct = parseInt(document.getElementById('setting-target-pct').value) || 20;
-    CONFIG.slowDuration = parseInt(document.getElementById('setting-slow-dur').value) || 700;
-    CONFIG.fastDuration = parseInt(document.getElementById('setting-fast-dur').value) || 300;
-    CONFIG.isi = parseInt(document.getElementById('setting-isi').value) || 300;
-    CONFIG.doubleXProb = parseFloat(document.getElementById('setting-double-x').value) || 0.2;
+// ... [existing saveSettings]
+
+function handleInput(e) {
+    if (!isTestRunning) return;
+    if (e.code !== 'Space') return;
     
-    els.settingsModal.close();
+    e.preventDefault(); // Prevent scrolling
+    
+    // Visual Feedback (Keystroke Indicator)
+    if (!e.repeat) {
+        showKeystrokeIndicator();
+    }
+
+    if (responseRegistered) return; // Ignore multiple presses for data logic
+    
+    responseRegistered = true;
+    
+    const rt = performance.now() - stimulusOnsetTime;
+    const trial = trials[currentTrialIndex];
+    
+    recordTrialData(trial, rt);
 }
 
-function startSequence() {
-    // Request Fullscreen
-    if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen().catch(err => {
-            console.log("Fullscreen denied", err);
-        });
+function handleKeyUp(e) {
+    if (e.code === 'Space') {
+        hideKeystrokeIndicator();
     }
+}
+
+function showKeystrokeIndicator() {
+    els.keystrokeIndicator.classList.add('active');
+}
+
+function hideKeystrokeIndicator() {
+    els.keystrokeIndicator.classList.remove('active');
+}
 
     showScreen('name');
 }
@@ -277,31 +297,54 @@ function calculateStats() {
     const goTrials = hits + omissions;
     const noGoTrials = commissions + correctRejections;
     
+    // Detailed RT stats
     const hitRTs = t.filter(x => x.type === 'Hit').map(x => x.rt);
     const avgRT = hitRTs.length ? (hitRTs.reduce((a,b)=>a+b,0) / hitRTs.length) : 0;
     
+    // Standard Deviation of RT
+    const sdRT = hitRTs.length > 1 ? Math.sqrt(hitRTs.map(x => Math.pow(x - avgRT, 2)).reduce((a,b) => a+b) / (hitRTs.length - 1)) : 0;
+
+    // Block Analysis
+    const slowTrials = t.filter(x => x.block === 'slow');
+    const fastTrials = t.filter(x => x.block === 'fast');
+    
+    const getBlockStats = (subset) => {
+        const h = subset.filter(x => x.type === 'Hit').map(x => x.rt);
+        const mean = h.length ? (h.reduce((a,b)=>a+b,0) / h.length) : 0;
+        return Math.round(mean);
+    };
+
     return {
         total: t.length,
         hits,
         omissions,
         commissions,
         avgRT: Math.round(avgRT),
+        sdRT: Math.round(sdRT),
         hitRate: goTrials ? ((hits / goTrials) * 100).toFixed(1) : 0,
-        commissionRate: noGoTrials ? ((commissions / noGoTrials) * 100).toFixed(1) : 0
+        commissionRate: noGoTrials ? ((commissions / noGoTrials) * 100).toFixed(1) : 0,
+        slowAvgRT: getBlockStats(slowTrials),
+        fastAvgRT: getBlockStats(fastTrials)
     };
 }
 
 function displayResults(stats) {
     const html = `
-        <tr><th>Metric</th><th>Value</th></tr>
+        <tr><th colspan="2">Summary Metrics</th></tr>
         <tr><td>Participant</td><td>${sessionData.participantName}</td></tr>
+        <tr><td>Date</td><td>${new Date().toLocaleString()}</td></tr>
         <tr><td>Total Trials</td><td>${stats.total}</td></tr>
-        <tr><td>Correct Hits (Go)</td><td>${stats.hits}</td></tr>
-        <tr><td>Omission Errors (Missed Go)</td><td>${stats.omissions}</td></tr>
-        <tr><td>Commission Errors (False Alarm on X)</td><td>${stats.commissions}</td></tr>
+        
+        <tr><th colspan="2">Accuracy</th></tr>
+        <tr><td>Hit Rate (Go Accuracy)</td><td>${stats.hitRate}% <small>(${stats.hits} hits)</small></td></tr>
+        <tr><td>Commission Error Rate (Impulsivity)</td><td>${stats.commissionRate}% <small>(${stats.commissions} errors)</small></td></tr>
+        <tr><td>Omission Errors (Inattention)</td><td>${stats.omissions}</td></tr>
+
+        <tr><th colspan="2">Timing Analysis</th></tr>
         <tr><td>Average Reaction Time</td><td>${stats.avgRT} ms</td></tr>
-        <tr><td>Hit Rate</td><td>${stats.hitRate}%</td></tr>
-        <tr><td>Commission Error Rate</td><td>${stats.commissionRate}%</td></tr>
+        <tr><td>Reaction Time Variability (SD)</td><td>${stats.sdRT} ms</td></tr>
+        <tr><td>Slow Block Avg RT</td><td>${stats.slowAvgRT} ms</td></tr>
+        <tr><td>Fast Block Avg RT</td><td>${stats.fastAvgRT} ms</td></tr>
     `;
     els.resultsTable.innerHTML = html;
 }
