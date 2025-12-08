@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open CPT Testing</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app-container">
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen">
+            <h1>CPT Test for ADD</h1>
+            <div class="instructions">
+                <p>Press <strong>SPACEBAR</strong> for every letter except the <strong>X</strong>.</p>
+                <p>Do <strong>NOT</strong> press anything when the <strong>X</strong> appears.</p>
+            </div>
+            <button id="btn-start-initial">Start</button>
+            <button id="btn-settings" style="background-color: #555; font-size: 0.9rem;">Settings</button>
+        </div>
+
+        <!-- Name Input Screen -->
+        <div id="name-screen" class="screen hidden">
+            <h1>Enter Participant Details</h1>
+            <input type="text" id="participant-name" placeholder="Enter Name or ID" autocomplete="off">
+            <button id="btn-start-test">Start Test</button>
+        </div>
+
+        <!-- Countdown Screen -->
+        <div id="countdown-screen" class="screen hidden">
+            <div id="countdown">3</div>
+        </div>
+
+        <!-- Test Screen -->
+        <div id="test-screen" class="screen hidden">
+            <div id="stimulus-display"></div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="screen hidden">
+            <h2>Test Results</h2>
+            <div id="results-summary">
+                <table id="results-table">
+                    <!-- Populated by JS -->
+                </table>
+            </div>
+            <button id="btn-restart">Restart</button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <dialog id="settings-modal">
+        <h2>Settings</h2>
+        <form method="dialog">
+            <div class="form-group">
+                <label>Total Trials</label>
+                <input type="number" id="setting-trials" value="300">
+            </div>
+            <div class="form-group">
+                <label>Target (X) Percentage (%)</label>
+                <input type="number" id="setting-target-pct" value="20" min="5" max="50">
+            </div>
+            <div class="form-group">
+                <label>Slow Block Duration (ms)</label>
+                <input type="number" id="setting-slow-dur" value="700">
+            </div>
+            <div class="form-group">
+                <label>Fast Block Duration (ms)</label>
+                <input type="number" id="setting-fast-dur" value="300">
+            </div>
+            <div class="form-group">
+                <label>Inter-Stimulus Interval (ISI) (ms)</label>
+                <input type="number" id="setting-isi" value="300">
+            </div>
+            <div class="form-group">
+                <label>Double X Probability (Fast Mode) (0-1)</label>
+                <input type="number" id="setting-double-x" value="0.2" step="0.1" min="0" max="1">
+            </div>
+            <div style="text-align: right; margin-top: 20px;">
+                <button type="submit" value="cancel" style="background-color: #666;">Cancel</button>
+                <button id="btn-save-settings" type="button">Save</button>
+            </div>
+        </form>
+    </dialog>
+
+    <script src="db.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
