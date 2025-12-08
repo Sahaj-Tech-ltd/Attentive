@@ -29,20 +29,21 @@ body.test-active {
 /* The White Focus Box */
 .focus-box {
     width: 33vw;
-    min-width: 400px; /* Ensure readability on small screens */
-    height: 60vh;
-    min-height: 500px;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    min-width: 450px; /* Ensure readability on small screens */
+    height: 65vh;
+    min-height: 550px;
+    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.12), 0 5px 15px rgba(0,0,0,0.08);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 2rem;
+    padding: 2.5rem;
     position: relative;
     transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
 .screen {
@@ -59,16 +60,18 @@ body.test-active {
 }
 
 h1 {
-    font-size: 2.2rem;
+    font-size: 2.4rem;
     margin-bottom: 1.5rem;
     color: #2c3e50;
-    font-weight: 600;
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
 h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
+    font-size: 1.9rem;
+    margin-bottom: 1.2rem;
     color: #34495e;
+    font-weight: 600;
 }
 
 p {
@@ -80,6 +83,10 @@ p {
 
 .instructions strong {
     color: #e74c3c;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 2px;
 }
 
 /* Buttons */

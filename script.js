@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-save-settings').addEventListener('click', saveSettings);
     document.getElementById('btn-start-test').addEventListener('click', startCountdown);
     document.getElementById('btn-restart').addEventListener('click', () => location.reload());
+    document.getElementById('btn-export').addEventListener('click', exportResults);
     
     // Keyboard listener
     document.addEventListener('keydown', handleInput);
@@ -89,6 +90,25 @@ function showKeystrokeIndicator() {
 function hideKeystrokeIndicator() {
     els.keystrokeIndicator.classList.remove('active');
 }
+
+function saveSettings() {
+    CONFIG.totalTrials = parseInt(document.getElementById('setting-trials').value) || 300;
+    CONFIG.targetPct = parseInt(document.getElementById('setting-target-pct').value) || 20;
+    CONFIG.slowDuration = parseInt(document.getElementById('setting-slow-dur').value) || 700;
+    CONFIG.fastDuration = parseInt(document.getElementById('setting-fast-dur').value) || 300;
+    CONFIG.isi = parseInt(document.getElementById('setting-isi').value) || 300;
+    CONFIG.doubleXProb = parseFloat(document.getElementById('setting-double-x').value) || 0.2;
+    
+    els.settingsModal.close();
+}
+
+function startSequence() {
+    // Request Fullscreen
+    if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(err => {
+            console.log("Fullscreen denied", err);
+        });
+    }
 
     showScreen('name');
 }
@@ -188,12 +208,6 @@ function runNextTrial() {
     
     // Next Trial after Duration + ISI
     trialTimeout = setTimeout(() => {
-        // Record omission if it was a non-target (Go) and no response
-        // Wait, instructions: "Press SPACE for every letter EXCEPT X".
-        // So: Non-X = Go (Target for action). X = No-Go.
-        // If Non-X and no response => Omission.
-        // If X and no response => Correct.
-        
         if (!responseRegistered) {
             recordTrialData(trial, null);
         }
@@ -201,23 +215,6 @@ function runNextTrial() {
         currentTrialIndex++;
         runNextTrial();
     }, trial.duration + CONFIG.isi);
-}
-
-function handleInput(e) {
-    if (!isTestRunning) return;
-    if (e.code !== 'Space') return;
-    if (responseRegistered) return; // Ignore multiple presses
-    
-    e.preventDefault(); // Prevent scrolling
-    responseRegistered = true;
-    
-    const rt = performance.now() - stimulusOnsetTime;
-    const trial = trials[currentTrialIndex];
-    
-    // Determine if reaction was valid (within stimulus presentation? or allowed during ISI?)
-    // Usually allowed during ISI too. RT is relative to onset.
-    
-    recordTrialData(trial, rt);
 }
 
 function recordTrialData(trial, rt) {
@@ -347,4 +344,24 @@ function displayResults(stats) {
         <tr><td>Fast Block Avg RT</td><td>${stats.fastAvgRT} ms</td></tr>
     `;
     els.resultsTable.innerHTML = html;
+}
+
+function exportResults() {
+    const exportData = {
+        participant: sessionData.participantName,
+        date: sessionData.startTime,
+        config: CONFIG,
+        stats: calculateStats(),
+        trials: sessionData.trials
+    };
+    
+    const dataStr = JSON.stringify(exportData, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    
+    const exportFileDefaultName = `CPT_${sessionData.participantName}_${new Date().toISOString().split('T')[0]}.json`;
+    
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
 }
