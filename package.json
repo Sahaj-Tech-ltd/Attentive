@@ -1,0 +1,28 @@
+{
+  "name": "anchor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Anchor - Comprehensive ADHD/ADD Assessment Platform. Web-based clinical screening using validated neuropsychological instruments.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint src/",
+    "test": "echo \"Error: no automated tests yet\" && exit 1"
+  },
+  "devDependencies": {
+    "vite": "^6.2.0",
+    "eslint": "^9.22.0"
+  },
+  "dependencies": {
+    "jspsych": "^7.3.3",
+    "@jspsych/plugin-html-keyboard-response": "^2.1.0",
+    "@jspsych/plugin-survey-likert": "^2.1.0",
+    "@jspsych/plugin-survey-multi-choice": "^2.1.0",
+    "@jspsych/plugin-survey-text": "^2.1.0",
+    "@jspsych/plugin-preload": "^2.1.0",
+    "@jspsych/plugin-instructions": "^2.1.0"
+  },
+  "license": "GPL-3.0"
+}
