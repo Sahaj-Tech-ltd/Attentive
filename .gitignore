@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.env
+.env.*
+
+.claude/
+claude/
+AGENTS.md
+CLAUDE.md
+opencode/
+
+*Zone.Identifier*
+*.log
