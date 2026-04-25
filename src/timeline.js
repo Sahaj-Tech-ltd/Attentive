@@ -58,6 +58,11 @@ export function buildTimeline(jsPsych, sessionId = null) {
         timeline.push(...buildDKEFSVerbalFluencyTimeline(jsPsych, sessionId));
     }
 
+    // Beck Inventories (BDI-II + BAI)
+    if (sessionId) {
+        timeline.push(...buildBeckInventoriesTimeline(jsPsych, sessionId));
+    }
+
     // CPT-3 Module — only add if sessionId is available
     if (sessionId) {
         timeline.push(...buildCPTTimeline(jsPsych, sessionId));

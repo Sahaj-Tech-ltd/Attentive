@@ -8,6 +8,7 @@ import { aggregateClinicalInterviewResults } from './modules/clinical-interview.
 import { aggregateWAIS4Results, getWAIS4Results } from './modules/wais4.js';
 import { aggregateTrailMakingResults } from './modules/trail-making.js';
 import { aggregateDKEFSResults, getDKEFSResults } from './modules/dkefs.js';
+import { aggregateBeckResults } from './modules/beck.js';
 
 let globalSessionId = null;
 
@@ -153,7 +154,17 @@ const jsPsych = initJsPsych({
                 }
             }
         }
-        
+
+        // Collect Beck Inventories (BDI-II + BAI) trial data
+        const beckTrials = data.filter(d => d.module === 'beck_inventories' && d.question_id);
+        if (beckTrials.length > 0) {
+            const beckResults = aggregateBeckResults(data);
+
+            if (globalSessionId) {
+                await saveModuleResults(globalSessionId, 'beck_inventories', beckResults);
+            }
+        }
+
         if (globalSessionId) {
             console.log('Assessment complete. Session ID:', globalSessionId);
         }
