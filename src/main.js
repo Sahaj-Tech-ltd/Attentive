@@ -1,5 +1,5 @@
 import 'jspsych/css/jspsych.css';
-import initJsPsych from 'jspsych';
+import { initJsPsych } from 'jspsych';
 import { buildTimeline } from './timeline.js';
 import { initDB, saveSession, saveModuleResults } from './storage/db.js';
 import { exportResults } from './utils/export.js';

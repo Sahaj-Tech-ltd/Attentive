@@ -11,3 +11,7 @@ opencode/
 
 *Zone.Identifier*
 *.log
+*_wf-*.md
+gemini*.md
+gemini rep.md
+
