@@ -33,6 +33,7 @@ export function buildTimeline(jsPsych, sessionId = null) {
                     <li>D-KEFS + Beck + BRIEF-A</li>
                     <li>Personality Assessment (PAI)</li>
                     <li>Victoria Stroop (Executive Function)</li>
+                    <li>Wisconsin Card Sorting (WCST)</li>
                 </ol>
                 <p style="margin-top: 2rem; font-size: 1.1rem;">
                     Press <strong>SPACE</strong> to begin
