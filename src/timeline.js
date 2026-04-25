@@ -4,6 +4,7 @@ import { buildWAISIVTimeline } from './modules/wais4.js';
 import { buildTrailMakingTimeline } from './modules/trail-making.js';
 import { buildDKEFSVerbalFluencyTimeline } from './modules/dkefs.js';
 import { buildBeckInventoriesTimeline } from './modules/beck.js';
+import { buildBriefATimeline } from './modules/brief-a.js';
 
 export function buildTimeline(jsPsych, sessionId = null) {
     const timeline = [];
@@ -61,6 +62,11 @@ export function buildTimeline(jsPsych, sessionId = null) {
     // Beck Inventories (BDI-II + BAI)
     if (sessionId) {
         timeline.push(...buildBeckInventoriesTimeline(jsPsych, sessionId));
+    }
+
+    // BRIEF-A (Behavior Rating Inventory of Executive Function – Adult)
+    if (sessionId) {
+        timeline.push(...buildBriefATimeline(jsPsych, sessionId));
     }
 
     // CPT-3 Module — only add if sessionId is available

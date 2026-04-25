@@ -9,6 +9,7 @@ import { aggregateWAIS4Results, getWAIS4Results } from './modules/wais4.js';
 import { aggregateTrailMakingResults } from './modules/trail-making.js';
 import { aggregateDKEFSResults, getDKEFSResults } from './modules/dkefs.js';
 import { aggregateBeckResults } from './modules/beck.js';
+import { aggregateBriefAResults } from './modules/brief-a.js';
 
 let globalSessionId = null;
 
@@ -162,6 +163,16 @@ const jsPsych = initJsPsych({
 
             if (globalSessionId) {
                 await saveModuleResults(globalSessionId, 'beck_inventories', beckResults);
+            }
+        }
+
+        // Collect BRIEF-A trial data
+        const briefTrials = data.filter(d => d.module === 'brief_a' && d.question_id);
+        if (briefTrials.length > 0) {
+            const briefResults = aggregateBriefAResults(data);
+
+            if (globalSessionId) {
+                await saveModuleResults(globalSessionId, 'brief_a', briefResults);
             }
         }
 
