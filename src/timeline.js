@@ -1,4 +1,11 @@
-export function buildTimeline(jsPsych) {
+import { buildCPTTimeline } from './modules/cpt3.js';
+import { buildClinicalInterviewTimeline } from './modules/clinical-interview.js';
+import { buildWAISIVTimeline } from './modules/wais4.js';
+import { buildTrailMakingTimeline } from './modules/trail-making.js';
+import { buildDKEFSVerbalFluencyTimeline } from './modules/dkefs.js';
+import { buildBeckInventoriesTimeline } from './modules/beck.js';
+
+export function buildTimeline(jsPsych, sessionId = null) {
     const timeline = [];
 
     timeline.push({
@@ -17,10 +24,10 @@ export function buildTimeline(jsPsych) {
                 <ol style="text-align: left; display: inline-block; line-height: 2;">
                     <li>Clinical Interview</li>
                     <li>WAIS-IV (Cognitive)</li>
-                    <li>D-KEFS + Beck + BRIEF-A</li>
                     <li>Trail Making A & B</li>
-                    <li>Personality Assessment (PAI)</li>
                     <li>Conners CPT-3 (Attention)</li>
+                    <li>D-KEFS + Beck + BRIEF-A</li>
+                    <li>Personality Assessment (PAI)</li>
                 </ol>
                 <p style="margin-top: 2rem; font-size: 1.1rem;">
                     Press <strong>SPACE</strong> to begin
@@ -31,13 +38,36 @@ export function buildTimeline(jsPsych) {
         post_trial_gap: 500
     });
 
+    // Clinical Interview Module — runs before CPT-3
+    if (sessionId) {
+        timeline.push(...buildClinicalInterviewTimeline(jsPsych, sessionId));
+    }
+
+    // WAIS-IV Module — Digit Span Forward/Backward + Coding/Symbol Search
+    if (sessionId) {
+        timeline.push(...buildWAISIVTimeline(jsPsych, sessionId));
+    }
+
+    // Trail Making A & B Module
+    if (sessionId) {
+        timeline.push(...buildTrailMakingTimeline(jsPsych, sessionId));
+    }
+
+    // D-KEFS Verbal Fluency Module
+    if (sessionId) {
+        timeline.push(...buildDKEFSVerbalFluencyTimeline(jsPsych, sessionId));
+    }
+
+    // CPT-3 Module — only add if sessionId is available
+    if (sessionId) {
+        timeline.push(...buildCPTTimeline(jsPsych, sessionId));
+    }
+
     // Future modules will be imported and pushed here:
     // timeline.push(...buildClinicalInterview(jsPsych));
-    // timeline.push(...buildWAIS(jsPsych));
     // timeline.push(...buildDKEFS(jsPsych));
     // timeline.push(...buildTrailMaking(jsPsych));
     // timeline.push(...buildPAI(jsPsych));
-    // timeline.push(...buildCPT(jsPsych));
 
     timeline.push({
         type: 'html-keyboard-response',
