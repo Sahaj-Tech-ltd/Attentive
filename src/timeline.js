@@ -6,6 +6,7 @@ import { buildDKEFSVerbalFluencyTimeline } from './modules/dkefs.js';
 import { buildBeckInventoriesTimeline } from './modules/beck.js';
 import { buildBriefATimeline } from './modules/brief-a.js';
 import { buildPAITimeline } from './modules/pai.js';
+import { buildStroopTimeline } from './modules/stroop.js';
 
 export function buildTimeline(jsPsych, sessionId = null) {
     const timeline = [];
@@ -30,6 +31,7 @@ export function buildTimeline(jsPsych, sessionId = null) {
                     <li>Conners CPT-3 (Attention)</li>
                     <li>D-KEFS + Beck + BRIEF-A</li>
                     <li>Personality Assessment (PAI)</li>
+                    <li>Victoria Stroop (Executive Function)</li>
                 </ol>
                 <p style="margin-top: 2rem; font-size: 1.1rem;">
                     Press <strong>SPACE</strong> to begin
@@ -78,6 +80,11 @@ export function buildTimeline(jsPsych, sessionId = null) {
     // CPT-3 Module — only add if sessionId is available
     if (sessionId) {
         timeline.push(...buildCPTTimeline(jsPsych, sessionId));
+    }
+
+    // Victoria Stroop Test — executive function / inhibitory control
+    if (sessionId) {
+        timeline.push(...buildStroopTimeline(jsPsych, sessionId));
     }
 
     // Future modules will be imported and pushed here:

@@ -260,3 +260,88 @@ td:nth-child(2) {
     font-weight: bold;
     color: #2c3e50;
 }
+
+/* ─── Victoria Stroop Test ─── */
+
+.stroop-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    width: 100%;
+}
+
+.stroop-stimulus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 120px;
+}
+
+.stroop-word {
+    user-select: none;
+    letter-spacing: 0.05em;
+}
+
+.stroop-key-prompt {
+    font-size: 1.1rem;
+    color: #555;
+    letter-spacing: 0.05em;
+}
+
+.stroop-info {
+    background: #f0f4f8;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin: 1rem 0;
+}
+
+.stroop-results-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.stroop-result-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    border-left: 4px solid #3498db;
+}
+
+.stroop-result-card h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    color: #2c3e50;
+}
+
+.stroop-result-card p {
+    margin: 0.2rem 0;
+    font-size: 0.9rem;
+}
+
+.stroop-interference-card {
+    background: linear-gradient(145deg, #f8f9fa 0%, #e8f4f8 100%);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    width: 100%;
+    border-left: 4px solid #e74c3c;
+}
+
+.stroop-interference-card h3 {
+    margin: 0 0 0.5rem 0;
+    color: #2c3e50;
+}
+
+.stroop-interference-card p {
+    margin: 0.2rem 0;
+}
+
+.diff-note {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 0.5rem;
+}

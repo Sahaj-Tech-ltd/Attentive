@@ -11,6 +11,7 @@ import { aggregateDKEFSResults, getDKEFSResults } from './modules/dkefs.js';
 import { aggregateBeckResults } from './modules/beck.js';
 import { aggregateBriefAResults } from './modules/brief-a.js';
 import { aggregatePAIResults } from './modules/pai.js';
+import { aggregateStroopResults } from './modules/stroop.js';
 
 let globalSessionId = null;
 
@@ -184,6 +185,36 @@ const jsPsych = initJsPsych({
 
             if (globalSessionId) {
                 await saveModuleResults(globalSessionId, 'pai', paiResults);
+            }
+        }
+
+        // Collect Victoria Stroop trial data
+        const stroopTrials = data.filter(d => d.module === 'stroop');
+        if (stroopTrials.length > 0) {
+            const stroopResults = aggregateStroopResults(data);
+
+            if (globalSessionId) {
+                await saveModuleResults(globalSessionId, 'stroop', stroopResults);
+
+                // Save per-trial data
+                const stroopTrialRecords = stroopTrials
+                    .filter(t => t.condition) // skip instruction screens
+                    .map(t => ({
+                        trial_type: 'stroop',
+                        condition: t.condition,
+                        trial_index: t.trial_index,
+                        word: t.word || null,
+                        ink: t.ink || null,
+                        correct_key: t.correct_key,
+                        user_key: t.user_key || null,
+                        correct: t.correct ? 1 : 0,
+                        timed_out: t.timed_out ? 1 : 0,
+                        rt_ms: t.rt_ms || 0,
+                    }));
+
+                if (stroopTrialRecords.length > 0) {
+                    await saveTrials(globalSessionId, stroopTrialRecords);
+                }
             }
         }
 
