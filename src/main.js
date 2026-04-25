@@ -10,6 +10,7 @@ import { aggregateTrailMakingResults } from './modules/trail-making.js';
 import { aggregateDKEFSResults, getDKEFSResults } from './modules/dkefs.js';
 import { aggregateBeckResults } from './modules/beck.js';
 import { aggregateBriefAResults } from './modules/brief-a.js';
+import { aggregatePAIResults } from './modules/pai.js';
 
 let globalSessionId = null;
 
@@ -173,6 +174,16 @@ const jsPsych = initJsPsych({
 
             if (globalSessionId) {
                 await saveModuleResults(globalSessionId, 'brief_a', briefResults);
+            }
+        }
+
+        // Collect PAI trial data
+        const paiTrials = data.filter(d => d.module === 'pai' && d.trial_type === 'page');
+        if (paiTrials.length > 0) {
+            const paiResults = aggregatePAIResults(data);
+
+            if (globalSessionId) {
+                await saveModuleResults(globalSessionId, 'pai', paiResults);
             }
         }
 

@@ -1,0 +1,20 @@
+services:
+  attentive:
+    image: node:20-alpine
+    container_name: attentive
+    restart: unless-stopped
+    working_dir: /app
+    command: >
+      sh -c "npm install &&
+             npm run build &&
+             npx --yes serve dist -l 3003 -s"
+    volumes:
+      - ./:/app
+    ports:
+      - "127.0.0.1:3003:3003"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3003/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s

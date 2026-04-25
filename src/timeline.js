@@ -5,6 +5,7 @@ import { buildTrailMakingTimeline } from './modules/trail-making.js';
 import { buildDKEFSVerbalFluencyTimeline } from './modules/dkefs.js';
 import { buildBeckInventoriesTimeline } from './modules/beck.js';
 import { buildBriefATimeline } from './modules/brief-a.js';
+import { buildPAITimeline } from './modules/pai.js';
 
 export function buildTimeline(jsPsych, sessionId = null) {
     const timeline = [];
@@ -67,6 +68,11 @@ export function buildTimeline(jsPsych, sessionId = null) {
     // BRIEF-A (Behavior Rating Inventory of Executive Function – Adult)
     if (sessionId) {
         timeline.push(...buildBriefATimeline(jsPsych, sessionId));
+    }
+
+    // PAI (Personality Assessment Inventory)
+    if (sessionId) {
+        timeline.push(...buildPAITimeline(jsPsych, sessionId));
     }
 
     // CPT-3 Module — only add if sessionId is available
