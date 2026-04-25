@@ -308,7 +308,7 @@ function buildCPTBlockTrials(jsPsych, trials, blockType) {
       blockTimeline.push({
         type: 'html-keyboard-response',
         stimulus: '<div id="stimulus-display" style="color:#888;">+</div>',
-        choices: jsPsych.NO_KEYS,
+        choices: 'NO_KEYS',
         trial_duration: trial.isi,
         data: { placeholder: true },
       });
