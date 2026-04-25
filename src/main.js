@@ -12,6 +12,7 @@ import { aggregateBeckResults } from './modules/beck.js';
 import { aggregateBriefAResults } from './modules/brief-a.js';
 import { aggregatePAIResults } from './modules/pai.js';
 import { aggregateStroopResults } from './modules/stroop.js';
+import { aggregateWCSTResults } from './modules/wcst.js';
 
 let globalSessionId = null;
 
@@ -214,6 +215,37 @@ const jsPsych = initJsPsych({
 
                 if (stroopTrialRecords.length > 0) {
                     await saveTrials(globalSessionId, stroopTrialRecords);
+                }
+            }
+        }
+
+        // Collect WCST trial data
+        const wcstTrials = data.filter(d => d.module === 'wcst' && !d.is_practice && d.trial_index !== undefined);
+        if (wcstTrials.length > 0) {
+            const wcstResults = aggregateWCSTResults(data);
+
+            if (globalSessionId) {
+                await saveModuleResults(globalSessionId, 'wcst', wcstResults);
+
+                // Save per-trial data
+                const wcstTrialRecords = wcstTrials
+                    .filter(t => t.current_category) // skip instruction screens
+                    .map(t => ({
+                        trial_type: 'wcst',
+                        trial_index: t.trial_index,
+                        current_category: t.current_category,
+                        categories_completed: t.categories_completed || 0,
+                        correct: t.correct ? 1 : 0,
+                        user_key: t.user_key || null,
+                        correct_key: t.correct_key || null,
+                        timed_out: t.timed_out ? 1 : 0,
+                        rt_ms: t.rt_ms || 0,
+                        is_perseverative_error: t.is_perseverative_error ? 1 : 0,
+                        is_non_perseverative_error: t.is_non_perseverative_error ? 1 : 0,
+                    }));
+
+                if (wcstTrialRecords.length > 0) {
+                    await saveTrials(globalSessionId, wcstTrialRecords);
                 }
             }
         }

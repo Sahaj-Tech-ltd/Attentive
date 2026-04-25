@@ -7,6 +7,7 @@ import { buildBeckInventoriesTimeline } from './modules/beck.js';
 import { buildBriefATimeline } from './modules/brief-a.js';
 import { buildPAITimeline } from './modules/pai.js';
 import { buildStroopTimeline } from './modules/stroop.js';
+import { buildWCSTTimeline } from './modules/wcst.js';
 
 export function buildTimeline(jsPsych, sessionId = null) {
     const timeline = [];
@@ -85,6 +86,11 @@ export function buildTimeline(jsPsych, sessionId = null) {
     // Victoria Stroop Test — executive function / inhibitory control
     if (sessionId) {
         timeline.push(...buildStroopTimeline(jsPsych, sessionId));
+    }
+
+    // Wisconsin Card Sorting Test — cognitive flexibility / executive function
+    if (sessionId) {
+        timeline.push(...buildWCSTTimeline(jsPsych, sessionId));
     }
 
     // Future modules will be imported and pushed here:
